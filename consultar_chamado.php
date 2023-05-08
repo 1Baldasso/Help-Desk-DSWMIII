@@ -1,10 +1,20 @@
 <?php 
 require_once "validador_acesso.php";
-  
-?>
+class Chamado{
+  function __construct($titulo, $categoria, $conteudo, $user_id)
+  {
+    $this->titulo = $titulo;
+    $this->categoria = $categoria;
+    $this->conteudo = $conteudo;
+    $this->user_id = $user_id;
+  }
+  public string $titulo;
+  public string $categoria;
+  public string $conteudo;
+  public int $user_id;
+}?>
 
 <?php
-
   //array de chamados
 
   $chamados = array();
@@ -17,6 +27,30 @@ require_once "validador_acesso.php";
     //linhas
     $registro = fgets($arquivo);//recupera a linha
     $chamados[] = $registro;
+
+  }
+
+  foreach($chamados as $chamado)
+  {
+    //print_r($chamados);
+    //print_r($chamado);
+    $registroFiltrado = explode('#', $chamado);
+    if(count($registroFiltrado) < 3)
+      continue;
+    $chamadoFinal = new Chamado(
+      $registroFiltrado[0],
+      $registroFiltrado[1],
+      $registroFiltrado[2],
+      $registroFiltrado[3]
+    );
+    if($_SESSION['cargo'] == "user")
+    {
+      if($chamadoFinal->user_id != $_SESSION['id'])
+      {
+        continue;
+      }
+    }
+    $display[] = $chamadoFinal;
   }
 
   //fechando o arquivo.hd
@@ -66,20 +100,12 @@ require_once "validador_acesso.php";
             
             <div class="card-body">
               
-              <?php foreach($chamados as $chamado){ ?>
-
-              <?php
-                $chamado_dados = explode('#', $chamado);
-
-                if(count($chamado_dados) < 3){
-                  continue;
-                }
-              ?>
+              <?php foreach($display as $chamado){ ?>
               <div class="card mb-3 bg-light">
                 <div class="card-body">
-                  <h5 class="card-title"><?= $chamado_dados[0]?></h5>
-                  <h6 class="card-subtitle mb-2 text-muted"><?= $chamado_dados[1]?></h6>
-                  <p class="card-text"><?= $chamado_dados[2]?></p>
+                  <h5 class="card-title"><?= $chamado->titulo?></h5>
+                  <h6 class="card-subtitle mb-2 text-muted"><?= $chamado->categoria?></h6>
+                  <p class="card-text"><?= $chamado->conteudo?></p>
 
                 </div>
               </div>

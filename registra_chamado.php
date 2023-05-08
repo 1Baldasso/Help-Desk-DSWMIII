@@ -1,5 +1,5 @@
 <?php
-
+    session_start();
     echo '<pre>';
 
     print_r($_POST);
@@ -12,7 +12,7 @@
     $descricao = str_replace('#','-',$_POST['descricao']);
     //implode('#',$_POST);
 
-    $texto = $titulo.'#'.$categoria.'#'.$descricao.PHP_EOL;
+    $texto = $titulo.'#'.$categoria.'#'.$descricao.PHP_EOL.'#'.$_SESSION['id'];
     
     //http://php.net/manual/pt_BR/function.fopen.php
     //Abrindo o arquivo

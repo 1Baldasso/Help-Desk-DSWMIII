@@ -12,8 +12,8 @@ $usuario_autenticado = false;
 
 //USUARIOS DO SISTEMA
 $usuarios_app = array(
-    array('email' => 'adm@teste.com.br', 'senha' => '123456'),
-    array('email' => 'user@teste.com.br', 'senha' => 'abcd')
+    array('id' => 1,'email' => 'adm@teste.com.br', 'senha' => '123456', 'cargo' => 'admin'),
+    array('id' => 2,'email' => 'user@teste.com.br', 'senha' => 'abcd', 'cargo' => 'user')
 );
 /*
 
@@ -32,6 +32,7 @@ foreach($usuarios_app as $user){
     */
     if($user['email'] == $_POST['email'] && $user['senha'] == $_POST['senha']){
         $usuario_autenticado = true;
+        $authenticated_user = $user;
     }
 }
 
@@ -39,8 +40,8 @@ foreach($usuarios_app as $user){
         echo 'Usuário autenticado.';
 
         $_SESSION['autenticado'] = 'SIM';
-        $_SESSION['x'] = 'um valor';
-        $_SESSION['y'] = 'outro valor';
+        $_SESSION['id'] = $authenticated_user['id'];
+        $_SESSION['cargo'] = $authenticated_user['cargo'];
         header('Location: home.php');
     }else{  
         $_SESSION['autenticado'] = 'NÃO';
